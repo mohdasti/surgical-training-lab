@@ -141,6 +141,67 @@ derive_thresholds_with_fatigue <- function(base_high, base_lapse, time_minutes, 
   )
 }
 
+#' Derive Fatigue-Adjusted Thresholds (Alternative Signature)
+#'
+#' @param time_minutes Current time-on-task in minutes
+#' @param baseline List with high_load_threshold0 and lapse_threshold0
+#' @param profile List with fatigue parameters (t0, t1, k_high, k_lapse, f_shape)
+#' @param cfg Configuration list
+#' @return List with adjusted thresholds and fatigue factor
+#' @export
+derive_fatigue_adjusted_thresholds <- function(time_minutes, baseline, profile, cfg = list()) {
+  # Extract baseline thresholds
+  base_high <- baseline$high_load_threshold0 %||% 0.60
+  base_lapse <- baseline$lapse_threshold0 %||% 0.85
+  
+  # Extract fatigue profile parameters
+  t0 <- profile$t0 %||% 30
+  t1 <- profile$t1 %||% 90
+  k_high <- profile$k_high %||% 0.15
+  k_lapse <- profile$k_lapse %||% 0.20
+  f_shape <- profile$f_shape %||% "linear"
+  
+  # Compute fatigue factor (0 = no fatigue, 1 = full fatigue)
+  if (time_minutes < t0) {
+    fatigue_factor <- 0
+  } else if (time_minutes >= t1) {
+    fatigue_factor <- 1
+  } else {
+    # Progress through fatigue window
+    progress <- (time_minutes - t0) / (t1 - t0)
+    
+    # Apply curve shape
+    fatigue_factor <- switch(f_shape,
+      "linear" = progress,
+      "logistic" = 1 / (1 + exp(-10 * (progress - 0.5))),  # Logistic curve
+      "exponential" = progress^2,
+      "step" = ifelse(progress > 0.5, 1, 0),
+      progress  # default to linear
+    )
+  }
+  
+  # Lower thresholds as fatigue increases (more sensitive)
+  high_adjusted <- base_high * (1 - fatigue_factor * k_high)
+  lapse_adjusted <- base_lapse * (1 - fatigue_factor * k_lapse)
+  
+  # Ensure minimums
+  high_adjusted <- max(0.2, high_adjusted)
+  lapse_adjusted <- max(0.3, lapse_adjusted)
+  
+  # Ensure logical ordering
+  if (lapse_adjusted <= high_adjusted) {
+    lapse_adjusted <- high_adjusted + 0.05
+  }
+  
+  list(
+    high_load_threshold = high_adjusted,
+    lapse_threshold = lapse_adjusted,
+    source = "fatigue_adaptive",
+    fatigue_factor = fatigue_factor,
+    time_minutes = time_minutes
+  )
+}
+
 #' Null-coalescing operator
 #' @keywords internal
 `%||%` <- function(x, y) {
