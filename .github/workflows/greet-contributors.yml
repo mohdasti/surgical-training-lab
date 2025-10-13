@@ -1,0 +1,43 @@
+name: Greet New Contributors
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Greet first-time contributors
+        uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: |
+            👋 **Welcome to the Surgical Training Lab!**
+            
+            Thank you for opening your first issue! We're excited to have you contributing to this research and educational tool.
+            
+            A maintainer will review your issue soon. In the meantime:
+            - 📖 Check out the [README](https://github.com/mohdasti/surgical-training-lab#readme) for background
+            - 🔬 See the [comparison table](https://github.com/mohdasti/surgical-training-lab/blob/main/COMPARISON.md) for context
+            - 🏥 For production features, see the [main dashboard](https://github.com/mohdasti/surgical-cognitive-dashboard)
+            
+            If you have questions, feel free to ask in [Discussions](https://github.com/mohdasti/surgical-training-lab/discussions)!
+          pr-message: |
+            🎉 **Thank you for your first pull request!**
+            
+            We really appreciate your contribution to the Surgical Training Lab. Your work helps advance research and education in surgical cognitive monitoring.
+            
+            A maintainer will review your PR soon. Please make sure:
+            - ✅ The code follows our module structure
+            - ✅ Any new paradigms include theory documentation
+            - ✅ Research citations are included where relevant
+            - ✅ The app runs without errors
+            
+            Thank you for being part of this open science initiative! 🔬
+

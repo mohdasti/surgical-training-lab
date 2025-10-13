@@ -1,0 +1,80 @@
+name: 🎓 Educational Use Case
+description: Share how you're using the Training Lab for teaching
+title: "[EDUCATION] "
+labels: ["education", "documentation"]
+assignees:
+  - mohdasti
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        We'd love to hear how you're using the Training Lab in education! 
+        Your experience helps improve the tool for other educators.
+
+  - type: dropdown
+    id: context
+    attributes:
+      label: Educational Context
+      description: Where are you using the Training Lab?
+      options:
+        - Graduate Course
+        - Undergraduate Course
+        - Workshop/Tutorial
+        - Conference Demo
+        - Lab Training
+        - Self-Study
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: course
+    attributes:
+      label: Course/Workshop Name
+      description: What's the name of your course or workshop?
+      placeholder: "e.g., 'Cognitive Neuroscience of Skilled Performance'"
+
+  - type: textarea
+    id: description
+    attributes:
+      label: How You're Using It
+      description: Describe how you're using the Training Lab
+      placeholder: |
+        e.g., "Students explore different paradigms to understand how cognitive theories translate to algorithms..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-works
+    attributes:
+      label: What Works Well
+      description: What aspects are particularly effective for teaching?
+      placeholder: Students love the interactive parameter adjustment...
+
+  - type: textarea
+    id: improvements
+    attributes:
+      label: Suggestions for Improvement
+      description: What would make it even better for education?
+      placeholder: It would be helpful to have...
+
+  - type: textarea
+    id: materials
+    attributes:
+      label: Materials You've Created
+      description: Have you created lesson plans, assignments, or other materials?
+      placeholder: |
+        If you're willing to share, we can add them to the documentation!
+        
+  - type: checkboxes
+    id: sharing
+    attributes:
+      label: Sharing Options
+      description: Would you like to share your materials?
+      options:
+        - label: I'd like to contribute my lesson plan
+        - label: I'd like to contribute assignments/exercises
+        - label: I'd like to contribute assessment materials
+        - label: I'd be willing to be listed as an educator using this tool
+

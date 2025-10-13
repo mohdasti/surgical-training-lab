@@ -1,0 +1,116 @@
+# Label Configuration for Surgical Training Lab
+# Apply using: gh label sync --file .github/labels.yml
+
+# Repository Labels
+- name: "research"
+  color: "8B5CF6"
+  description: "Research and experimental features"
+
+- name: "education"
+  color: "3B82F6"
+  description: "Educational materials and features"
+
+# Type Labels
+- name: "bug"
+  color: "DC2626"
+  description: "Something isn't working"
+
+- name: "enhancement"
+  color: "10B981"
+  description: "New feature or request"
+
+- name: "documentation"
+  color: "3B82F6"
+  description: "Improvements or additions to documentation"
+
+- name: "theory"
+  color: "8B5CF6"
+  description: "Cognitive theory implementation"
+
+- name: "ui/ux"
+  color: "EC4899"
+  description: "User interface and experience improvements"
+
+- name: "performance"
+  color: "F59E0B"
+  description: "Performance optimization"
+
+- name: "maintenance"
+  color: "6B7280"
+  description: "Code maintenance and refactoring"
+
+# Priority Labels
+- name: "critical"
+  color: "DC2626"
+  description: "Critical priority"
+
+- name: "high"
+  color: "F97316"
+  description: "High priority"
+
+- name: "medium"
+  color: "F59E0B"
+  description: "Medium priority"
+
+- name: "low"
+  color: "10B981"
+  description: "Low priority"
+
+# Status Labels
+- name: "needs-triage"
+  color: "9CA3AF"
+  description: "Needs initial review and categorization"
+
+- name: "discussion"
+  color: "3B82F6"
+  description: "Needs community discussion"
+
+- name: "investigating"
+  color: "F59E0B"
+  description: "Being researched or investigated"
+
+- name: "ready"
+  color: "10B981"
+  description: "Ready to implement"
+
+- name: "in-progress"
+  color: "F97316"
+  description: "Currently being worked on"
+
+- name: "testing"
+  color: "8B5CF6"
+  description: "In testing phase"
+
+# Special Labels
+- name: "good first issue"
+  color: "10B981"
+  description: "Good for newcomers"
+
+- name: "help wanted"
+  color: "3B82F6"
+  description: "Extra attention is needed"
+
+- name: "question"
+  color: "8B5CF6"
+  description: "Further information is requested"
+
+- name: "duplicate"
+  color: "6B7280"
+  description: "This issue or pull request already exists"
+
+- name: "wontfix"
+  color: "6B7280"
+  description: "This will not be worked on"
+
+- name: "paradigm"
+  color: "A855F7"
+  description: "Related to cognitive paradigm implementation"
+
+- name: "parameter"
+  color: "06B6D4"
+  description: "Related to parameter adjustment"
+
+- name: "comparison"
+  color: "F59E0B"
+  description: "Related to paradigm comparison features"
+

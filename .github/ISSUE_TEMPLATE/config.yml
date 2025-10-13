@@ -1,0 +1,12 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/mohdasti/surgical-training-lab/discussions
+    about: Ask questions, share ideas, or discuss the Training Lab
+  - name: 🏥 Production Dashboard Issues
+    url: https://github.com/mohdasti/surgical-cognitive-dashboard/issues
+    about: Report issues with the production clinical monitoring dashboard
+  - name: 📚 Documentation
+    url: https://github.com/mohdasti/surgical-training-lab#readme
+    about: Read the comprehensive documentation and theory background
+

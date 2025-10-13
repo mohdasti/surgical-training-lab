@@ -1,0 +1,90 @@
+name: 🐛 Bug Report
+description: Report a bug in the Training Lab
+title: "[BUG] "
+labels: ["bug", "research"]
+assignees:
+  - mohdasti
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug in the Surgical Training Lab! This helps improve the tool for everyone.
+
+  - type: dropdown
+    id: paradigm
+    attributes:
+      label: Which paradigm is affected?
+      description: Select the cognitive paradigm where the bug occurs
+      options:
+        - Inverted-U Zone Adjuster (AGT)
+        - Unified Sensitivity (Resource Competition)
+        - Fatigue-Adaptive Thresholds
+        - Comparison Mode
+        - General UI/App
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is
+      placeholder: Tell us what went wrong
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce this issue?
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Adjust parameter '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+      placeholder: What should have happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain your problem
+
+  - type: input
+    id: r-version
+    attributes:
+      label: R Version
+      description: What version of R are you using?
+      placeholder: "e.g., 4.3.1"
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      description: Which browser are you using?
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Edge
+        - Other
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here
+

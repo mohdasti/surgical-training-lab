@@ -1,0 +1,97 @@
+name: ✨ Feature Request
+description: Suggest a new feature or paradigm for the Training Lab
+title: "[FEATURE] "
+labels: ["enhancement", "research"]
+assignees:
+  - mohdasti
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! The Training Lab thrives on community ideas.
+
+  - type: dropdown
+    id: feature-type
+    attributes:
+      label: Feature Type
+      description: What type of feature are you suggesting?
+      options:
+        - New Cognitive Paradigm
+        - Parameter Enhancement
+        - Educational Material
+        - Visualization Improvement
+        - Export/Data Feature
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: theory
+    attributes:
+      label: Cognitive Theory Background
+      description: If suggesting a new paradigm, what cognitive theory does it implement?
+      placeholder: |
+        e.g., "Based on Wickens' Multiple Resource Theory (2002)..."
+        Include research citations if possible
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature Description
+      description: Describe the feature you'd like to see
+      placeholder: What should this feature do?
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: How would this feature be used in research or education?
+      placeholder: |
+        e.g., "This would help students understand..."
+        e.g., "This would enable research on..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Implementation Ideas
+      description: Do you have ideas on how this could be implemented?
+      placeholder: Technical approach, parameters needed, UI considerations, etc.
+
+  - type: textarea
+    id: citations
+    attributes:
+      label: Research Citations
+      description: Relevant papers or studies supporting this feature
+      placeholder: |
+        - Author, A. (Year). Title. Journal.
+        - Author, B. (Year). Title. Journal.
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - Critical - Blocks my research
+        - High - Needed for upcoming project
+        - Medium - Would be very helpful
+        - Low - Nice to have
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Would you like to contribute?
+      description: Are you interested in helping implement this feature?
+      options:
+        - label: I would like to contribute to this feature
+        - label: I can provide test cases
+        - label: I can provide documentation
+        - label: I can provide research citations
+
