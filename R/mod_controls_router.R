@@ -24,31 +24,17 @@ mod_controls_router_ui <- function(id) {
       ns("control_source"),
       label = "Active Control Paradigm:",
       choices = c(
-        "Current (Baseline - Independent Sliders)" = "current",
-        "Inverted-U Zone Adjuster" = "inverted_u",
-        "Unified Sensitivity Slider" = "sensitivity",
-        "Fatigue-Adaptive Thresholds" = "fatigue"
+        "🎯 Inverted-U Zone Adjuster (Adaptive Gain Theory)" = "inverted_u",
+        "🔀 Unified Sensitivity Slider (Resource Competition)" = "sensitivity",
+        "⏰ Fatigue-Adaptive Thresholds (Vigilance Decrement)" = "fatigue"
       ),
-      selected = "current",
+      selected = "inverted_u",
       width = "100%"
     ),
     
     hr(),
     
     # Static UI with conditionalPanel (replaces renderUI to prevent opacity)
-    conditionalPanel(
-      condition = "input.control_source == 'current'",
-      ns = ns,
-      div(
-        style = "padding: 20px; background: #f8f9fa; border-radius: 8px;",
-        h5("ℹ️ Using Baseline Controls"),
-        p("The system is using the standard independent threshold sliders ",
-          "from the main control panel. These controls allow independent ",
-          "adjustment of High Load and Lapse thresholds."),
-        p(strong("Note:"), " This mode does not enforce interdependent logic.")
-      )
-    ),
-    
     conditionalPanel(
       condition = "input.control_source == 'inverted_u'",
       ns = ns,
@@ -93,26 +79,14 @@ mod_controls_router_server <- function(id, cfg = list(), existing_thresholds = N
     thresholds_routed <- reactive({
       source <- input$control_source
       
-      if (source == "current") {
-        # Use existing thresholds from baseline controls
-        if (!is.null(existing_thresholds) && is.reactive(existing_thresholds)) {
-          existing_thresholds()
-        } else {
-          # Fallback if not provided
-          list(
-            high_load_threshold = 0.60,
-            lapse_threshold = 0.85,
-            source = "current_fallback"
-          )
-        }
-      } else if (source == "inverted_u") {
+      if (source == "inverted_u") {
         inverted_u$thresholds()
       } else if (source == "sensitivity") {
         sensitivity$thresholds()
       } else if (source == "fatigue") {
         fatigue$thresholds()
       } else {
-        # Default fallback
+        # Default fallback (should never reach here)
         list(
           high_load_threshold = 0.60,
           lapse_threshold = 0.85,

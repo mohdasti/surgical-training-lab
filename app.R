@@ -9,6 +9,7 @@ library(zoo)
 # Source required modules
 source("R/ui_constants.R")
 source("R/ui_theme.R")
+source("R/threshold_utils.R")  # Utility functions for threshold calculations
 source("R/mod_scenario_presets.R")
 source("R/mod_inverted_u_adjuster.R")
 source("R/mod_unified_sensitivity.R")
