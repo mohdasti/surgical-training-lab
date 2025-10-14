@@ -36,20 +36,17 @@ mod_controls_router_ui <- function(id) {
     
     # Static UI with conditionalPanel (replaces renderUI to prevent opacity)
     conditionalPanel(
-      condition = "input.control_source == 'inverted_u'",
-      ns = ns,
+      condition = sprintf("input['%s'] == 'inverted_u'", ns("control_source")),
       mod_inverted_u_adjuster_ui(ns("inverted_u"))
     ),
     
     conditionalPanel(
-      condition = "input.control_source == 'sensitivity'",
-      ns = ns,
+      condition = sprintf("input['%s'] == 'sensitivity'", ns("control_source")),
       mod_unified_sensitivity_ui(ns("sensitivity"))
     ),
     
     conditionalPanel(
-      condition = "input.control_source == 'fatigue'",
-      ns = ns,
+      condition = sprintf("input['%s'] == 'fatigue'", ns("control_source")),
       mod_fatigue_adaptive_ui(ns("fatigue"))
     )
   )

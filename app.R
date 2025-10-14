@@ -27,8 +27,8 @@ ui <- page_fluid(
   shinyjs::useShinyjs(),
   
   # Custom CSS
-  tags$head(
-    tags$style(HTML("
+    tags$head(
+      tags$style(HTML("
       /* Modern, clean design */
       body {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -46,7 +46,7 @@ ui <- page_fluid(
       
       .header-banner {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        color: white; 
         padding: 30px;
         border-radius: 15px;
         margin-bottom: 30px;
@@ -159,26 +159,26 @@ ui <- page_fluid(
     ),
     
     # Theory overview cards
-    fluidRow(
-      column(4,
+        fluidRow(
+          column(4, 
         div(class = "theory-card",
           h4("🎯 Inverted-U Zone"),
           p(strong("Theory:"), " Adaptive Gain Theory (Aston-Jones & Cohen, 2005)"),
           p(strong("Concept:"), " Performance follows an inverted-U with arousal. ",
             "Adjusts thresholds based on arousal zones (sub-optimal, optimal, hyper-arousal)."),
           p(strong("Key Parameter:"), " Pupil diameter as arousal proxy")
-        )
-      ),
-      column(4,
+            )
+          ),
+          column(4,
         div(class = "theory-card",
           h4("🔀 Unified Sensitivity"),
           p(strong("Theory:"), " Resource Competition Model (Norman & Bobrow, 1975)"),
           p(strong("Concept:"), " Finite cognitive resources shared across tasks. ",
             "Single sensitivity slider controls detection vs. false alarm trade-off."),
           p(strong("Key Parameter:"), " System sensitivity level")
-        )
-      ),
-      column(4,
+            )
+          ),
+          column(4,
         div(class = "theory-card",
           h4("⏰ Fatigue-Adaptive"),
           p(strong("Theory:"), " Vigilance Decrement (Warm et al., 2008)"),
@@ -315,11 +315,11 @@ server <- function(input, output, session) {
   
   # Display welcome message on startup
   observe({
-    showNotification(
+        showNotification(
       "🎓 Welcome to the Surgical Training Lab! Select a cognitive paradigm to begin exploration.",
-      type = "message",
-      duration = 10
-    )
+          type = "message",
+          duration = 10
+        )
   })
 }
 
