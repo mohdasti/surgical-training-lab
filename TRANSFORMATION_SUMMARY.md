@@ -42,7 +42,7 @@
 
 ## 🚀 What's Running Now
 
-Your app is **live at http://127.0.0.1:3839** with:
+Your app is **live at http://127.0.0.1:8080** with:
 
 ### ✅ **Removed (Now in Production Dashboard):**
 - ❌ Live Monitor tab with 5Hz biosignal streaming
@@ -51,11 +51,12 @@ Your app is **live at http://127.0.0.1:3839** with:
 - ❌ Real-time plots (pupil, grip, tremor)
 
 ### ✨ **Focused On:**
-- ✅ Three cognitive theory paradigms
-- ✅ Interactive parameter controls
-- ✅ Real-time threshold adjustment
-- ✅ Theory comparison
-- ✅ Educational content
+- ✅ Three cognitive theory paradigms (all displayed simultaneously)
+- ✅ Interactive parameter controls with improved text sizes
+- ✅ Real-time threshold adjustment and visualization
+- ✅ Clean vertical layout (controls on top, plots below)
+- ✅ Simplified interface (no redundant checkboxes)
+- ✅ Educational content with better readability
 
 ---
 
@@ -268,10 +269,11 @@ git push origin main
 ## 🚀 Ready to Launch!
 
 Your **Surgical Training Lab** is:
-- ✅ Running locally at http://127.0.0.1:3839
-- ✅ Committed to git (commit `359f607`)
+- ✅ Running locally at http://127.0.0.1:8080
+- ✅ Committed to git (commit `72a4f48`)
 - ✅ Documented for embedding
 - ✅ Focused on theoretical exploration
+- ✅ Simplified interface with improved readability
 - ✅ Ready for ShinyApps.io deployment
 - ✅ Ready for Quarto integration
 

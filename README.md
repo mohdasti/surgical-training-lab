@@ -131,11 +131,11 @@ Rscript -e "shiny::runApp('app.R', port=3839, launch.browser=TRUE)"
 ### **Usage:**
 
 1. **Read the theory cards** - Understand the three paradigms
-2. **Select a paradigm** from the dropdown
-3. **Adjust parameters** using the interactive controls
-4. **Observe threshold changes** in real-time
-5. **Try scenario presets** for common surgical situations
-6. **Switch paradigms** to compare approaches
+2. **Explore each paradigm** - All three are displayed simultaneously
+3. **Adjust parameters** using the interactive controls (sliders, inputs)
+4. **Observe threshold changes** in real-time plots
+5. **Compare paradigms** side-by-side to understand differences
+6. **Experiment with different values** to see how theories behave
 
 ---
 
@@ -200,15 +200,12 @@ Rscript -e "shiny::runApp('app.R', port=3839, launch.browser=TRUE)"
 
 ```
 surgical-training-lab/
-├── app.R                          # Main Shiny application (THEORY EXPLORER ONLY)
+├── app.R                          # Main Shiny application (simplified interface)
 ├── R/                             # Modules and utilities
-│   ├── mod_experimental_controls_tab.R   # Main theory explorer container
-│   ├── mod_inverted_u_adjuster.R         # AGT paradigm
-│   ├── mod_unified_sensitivity.R         # Resource model
-│   ├── mod_fatigue_adaptive.R            # Vigilance paradigm
-│   ├── mod_scenario_presets.R            # Quick presets
-│   ├── mod_controls_router.R             # Threshold routing
-│   ├── threshold_adapter.R               # Unified threshold API
+│   ├── mod_inverted_u_adjuster.R         # Inverted-U paradigm
+│   ├── mod_unified_sensitivity.R         # Unified sensitivity paradigm
+│   ├── mod_fatigue_adaptive.R            # Fatigue-adaptive paradigm
+│   ├── threshold_utils.R                 # Threshold calculation utilities
 │   ├── ui_constants.R                    # UI constants
 │   └── ui_theme.R                        # Theme
 ├── config/
