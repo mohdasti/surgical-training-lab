@@ -13,15 +13,16 @@ mod_unified_sensitivity_ui <- function(id) {
   ns <- NS(id)
   
   tagList(
-    h4("🎚️ Unified Sensitivity Control"),
     p(style = "color: #666; font-size: 0.9em;",
       "A single slider that intelligently adjusts both thresholds. ",
       "Moving toward 'Strict' increases sensitivity (more alerts)."
     ),
     
+    # Controls on top
     fluidRow(
-      column(8,
+      column(6,
         wellPanel(
+          h5("🎚️ Sensitivity Control"),
           sliderInput(
             ns("sensitivity"),
             label = NULL,
@@ -42,7 +43,7 @@ mod_unified_sensitivity_ui <- function(id) {
           actionButton(ns("preset_strict"), "Strict (0.9)", class = "btn-sm")
         )
       ),
-      column(4,
+      column(6,
         wellPanel(
           h5("📊 Derived Thresholds"),
           tags$table(style = "width: 100%;",
@@ -59,10 +60,15 @@ mod_unified_sensitivity_ui <- function(id) {
               tags$td(strong("Lapse:")),
               tags$td(textOutput(ns("lapse_threshold_display")), style = "text-align: right; color: #e74c3c;")
             )
-          ),
-          hr(),
-          plotOutput(ns("threshold_viz"), height = "200px")
+          )
         )
+      )
+    ),
+    
+    # Plot below (full width)
+    fluidRow(
+      column(12,
+        plotOutput(ns("threshold_viz"), height = "400px")
       )
     )
   )
@@ -134,12 +140,12 @@ mod_unified_sensitivity_server <- function(id, cfg = list()) {
       current_s <- input$sensitivity
       current_thresh <- thresholds_reactive()
       
-      par(mar = c(3, 3, 1, 1))
+      par(mar = c(5, 5, 4, 2), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.3)
       plot(thresh_df$sensitivity, thresh_df$high, 
-           type = "l", col = "#f39c12", lwd = 2,
-           xlab = "", ylab = "Threshold",
-           ylim = c(0.3, 1.0), las = 1)
-      lines(thresh_df$sensitivity, thresh_df$lapse, col = "#e74c3c", lwd = 2)
+           type = "l", col = "#f39c12", lwd = 3,
+           xlab = "Sensitivity", ylab = "Threshold",
+           ylim = c(0.3, 1.0), las = 1, main = "Threshold vs Sensitivity")
+      lines(thresh_df$sensitivity, thresh_df$lapse, col = "#e74c3c", lwd = 3)
       
       # Mark current position
       points(current_s, current_thresh$high_load_threshold, 
@@ -151,9 +157,7 @@ mod_unified_sensitivity_server <- function(id, cfg = list()) {
       legend("topright", 
              legend = c("High Load", "Lapse"),
              col = c("#f39c12", "#e74c3c"),
-             lwd = 2, bty = "n", cex = 0.8)
-      
-      title(xlab = "Sensitivity", line = 2)
+             lwd = 3, bty = "n", cex = 1.0)
     })
     
     # Return reactive interface

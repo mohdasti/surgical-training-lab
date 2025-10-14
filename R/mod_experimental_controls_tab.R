@@ -100,8 +100,11 @@ mod_experimental_controls_tab_ui <- function(id) {
 #' @export
 mod_experimental_controls_tab_server <- function(id, cfg = list(), existing_thresholds = NULL) {
   moduleServer(id, function(input, output, session) {
+    cat("DEBUG: Experimental controls tab server started\n")
+    
     # Mount scenario presets module
     presets <- mod_scenario_presets_server("presets")
+    cat("DEBUG: Scenario presets module mounted\n")
     
     # Wire through to router with preset overrides
     router <- mod_controls_router_server(
@@ -110,6 +113,7 @@ mod_experimental_controls_tab_server <- function(id, cfg = list(), existing_thre
       existing_thresholds = existing_thresholds,
       preset_overrides = presets  # Pass preset configuration
     )
+    cat("DEBUG: Controls router module mounted\n")
     
     # Return router's interface plus preset info
     list(

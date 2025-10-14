@@ -17,36 +17,36 @@ mod_controls_router_ui <- function(id) {
       style = "background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px;",
       h4("🎛️ Control Source Selection", style = "margin-top: 0; color: white; font-weight: 600;"),
       p("Select which control paradigm should drive the cognitive state thresholds.", 
-        style = "margin-bottom: 10px; color: rgba(255, 255, 255, 0.95);")
+        style = "margin-bottom: 10px; color: rgba(255, 255, 255, 0.95);"),
+      
+      radioButtons(
+        inputId = ns("control_source"),
+        label = NULL,
+        choices = c(
+          "🎯 Inverted-U Zone Adjuster (Adaptive Gain Theory)" = "inverted_u",
+          "🔀 Unified Sensitivity Slider (Resource Competition)" = "sensitivity",
+          "⏰ Fatigue-Adaptive Thresholds (Vigilance Decrement)" = "fatigue"
+        ),
+        selected = "inverted_u",
+        inline = FALSE
+      )
     ),
     
-    radioButtons(
-      ns("control_source"),
-      label = "Active Control Paradigm:",
-      choices = c(
-        "🎯 Inverted-U Zone Adjuster (Adaptive Gain Theory)" = "inverted_u",
-        "🔀 Unified Sensitivity Slider (Resource Competition)" = "sensitivity",
-        "⏰ Fatigue-Adaptive Thresholds (Vigilance Decrement)" = "fatigue"
-      ),
-      selected = "inverted_u",
-      width = "100%"
-    ),
-    
-    hr(),
-    
-    # Static UI with conditionalPanel (replaces renderUI to prevent opacity)
     conditionalPanel(
       condition = sprintf("input['%s'] == 'inverted_u'", ns("control_source")),
+      h4("🎯 Inverted-U Zone Adjuster"),
       mod_inverted_u_adjuster_ui(ns("inverted_u"))
     ),
     
     conditionalPanel(
       condition = sprintf("input['%s'] == 'sensitivity'", ns("control_source")),
+      h4("🔀 Unified Sensitivity Slider"),
       mod_unified_sensitivity_ui(ns("sensitivity"))
     ),
     
     conditionalPanel(
       condition = sprintf("input['%s'] == 'fatigue'", ns("control_source")),
+      h4("⏰ Fatigue-Adaptive Thresholds"),
       mod_fatigue_adaptive_ui(ns("fatigue"))
     )
   )
