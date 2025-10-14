@@ -117,6 +117,7 @@ mod_inverted_u_adjuster_server <- function(id, cfg = list()) {
     
     # Render inverted-U curve with zones
     output$curve_plot <- plotly::renderPlotly({
+      cat("DEBUG: Rendering Inverted-U curve plot\n")
       # Generate inverted-U curve (normalized Gaussian)
       x <- seq(0, 1, length.out = 200)
       sigma <- 0.18

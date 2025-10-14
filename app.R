@@ -5,6 +5,7 @@ library(DT)
 library(shinyjs)
 library(tidyverse)
 library(zoo)
+library(htmltools)
 
 # Source required modules
 source("R/ui_constants.R")
@@ -22,13 +23,16 @@ source("R/threshold_adapter.R")
 # UI
 # ============================================================================
 
-ui <- page_fluid(
+ui <- fluidPage(
   # Initialize shinyjs
   shinyjs::useShinyjs(),
   
   # Custom CSS
-    tags$head(
-      tags$style(HTML("
+  tags$head(
+    # Load Plotly from CDN
+    tags$script(src = "https://cdn.plot.ly/plotly-2.27.0.min.js"),
+    
+    tags$style(HTML("
       /* Modern, clean design */
       body {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -158,6 +162,11 @@ ui <- page_fluid(
       )
     ),
     
+    # Force plotly to load (tiny visible plot to trigger dependency loading)
+    div(style = "height: 1px; overflow: hidden;",
+      plotly::plotlyOutput("force_plotly_load", height = "1px")
+    ),
+    
     # Theory overview cards
         fluidRow(
           column(4, 
@@ -216,6 +225,17 @@ ui <- page_fluid(
 # ============================================================================
 
 server <- function(input, output, session) {
+  
+  # Dummy plotly to force dependency loading
+  output$`_dummy_` <- plotly::renderPlotly({
+    plotly::plot_ly(x = 1, y = 1)
+  })
+  
+  # Force plotly dependencies to load with minimal plot
+  output$force_plotly_load <- plotly::renderPlotly({
+    plotly::plot_ly(x = c(1), y = c(1), type = "scatter", mode = "markers") %>%
+      plotly::layout(margin = list(l = 0, r = 0, t = 0, b = 0))
+  })
   
   # Simulated real-time data for demonstration
   realtime_data <- reactiveVal(tibble::tibble(

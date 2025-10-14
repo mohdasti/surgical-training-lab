@@ -62,9 +62,7 @@ mod_controls_router_ui <- function(id) {
 #' @export
 mod_controls_router_server <- function(id, cfg = list(), existing_thresholds = NULL, preset_overrides = NULL) {
   moduleServer(id, function(input, output, session) {
-    ns <- session$ns
-    
-    # Initialize all experimental modules
+    # Initialize all experimental modules (with proper IDs matching UI)
     inverted_u <- mod_inverted_u_adjuster_server("inverted_u", cfg)
     sensitivity <- mod_unified_sensitivity_server("sensitivity", cfg)
     fatigue <- mod_fatigue_adaptive_server("fatigue", cfg)
