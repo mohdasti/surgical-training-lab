@@ -43,7 +43,7 @@ sdt_classify_hysteresis <- function(e, lo_enter, lo_exit, hi_enter, hi_exit) {
 }
 
 .clamp01 <- function(x) pmax(0, pmin(1, x))
-.z <- function(x) if (length(x) > 1 && stats::sd(x) > 0) (x - mean(x))/stats::sd(x) else 0
+.z <- function(x) if (length(x) > 1 && stats::sd(x) > 0) (x - mean(x))/stats::sd(x) else rep(0, length(x))
 
 #' Time-on-Task decision-threshold controller (policy)
 #' @param phys_opt optional list with pre/post short windows: RMSSD_pre/post, TEPR_pre/post, Tremor_pre/post
