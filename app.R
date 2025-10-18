@@ -330,11 +330,11 @@ ui <- fluidPage(
   ),
   
   # ========================================================================
-  # Export Policy Section
+  # Export/Import Policy Section
   # ========================================================================
   hr(),
   div(style = "background: #f0f9ff; padding: 20px; border-radius: 8px; margin: 20px 0;",
-    h4("📦 Export Policy Configuration"),
+    h4("📦 Export / Import Policy Configuration"),
     fluidRow(
       column(4,
         radioButtons("policy_kind", "Export which policy?", inline = TRUE,
@@ -347,6 +347,20 @@ ui <- fluidPage(
       column(4, 
         br(),
         downloadButton("download_policy", "Export policy JSON", class = "btn-primary")
+      )
+    ),
+    hr(style = "margin: 15px 0;"),
+    fluidRow(
+      column(6,
+        fileInput("import_policy", "Import policy JSON", 
+                  accept = c(".json", "application/json"),
+                  buttonLabel = "Browse...",
+                  placeholder = "No file selected")
+      ),
+      column(6,
+        br(),
+        helpText("📥 Upload a previously exported policy JSON to restore parameter values. ",
+                 "The sliders will update automatically to match the imported configuration.")
       )
     )
   )
@@ -600,6 +614,56 @@ server <- function(input, output, session) {
       jsonlite::write_json(policy, file, auto_unbox = TRUE, pretty = TRUE)
     }
   )
+  
+  # ========================================================================
+  # Import Policy JSON (Upload and Restore Parameters)
+  # ========================================================================
+  observeEvent(input$import_policy, {
+    req(input$import_policy$datapath)
+    
+    # Parse JSON
+    pol <- tryCatch(
+      jsonlite::read_json(input$import_policy$datapath, simplifyVector = TRUE),
+      error = function(e) {
+        showNotification("Error reading JSON file. Please check format.", type = "error")
+        return(NULL)
+      }
+    )
+    
+    req(pol$kind, pol$params)
+    
+    # Update sliders based on policy type
+    if (pol$kind == "dual_criterion") {
+      p <- pol$params
+      updateSliderInput(session, "criterion_tightness", value = p$criterion_tightness)
+      updateSliderInput(session, "coupling",            value = p$coupling)
+      updateSliderInput(session, "hys_margin",          value = p$hys_margin)
+      updateSliderInput(session, "base_hl",             value = p$base_hl)
+      updateSliderInput(session, "base_lapse",          value = p$base_lapse)
+      updateSliderInput(session, "move_range",          value = p$move_range)
+      showNotification("✓ Dual-Criterion policy imported successfully!", type = "message", duration = 3)
+      
+    } else if (pol$kind == "time_on_task") {
+      p <- pol$params
+      updateSliderInput(session, "c_start",               value = p$c_start)
+      updateSliderInput(session, "c_floor",               value = p$c_floor)
+      updateSliderInput(session, "onset_min",             value = p$onset_min)
+      updateSliderInput(session, "fatigue_half_life_min", value = p$fatigue_half_life_min)
+      updateSliderInput(session, "microbreak_min",        value = p$microbreak_min)
+      updateSliderInput(session, "microbreak_reset_fixed",value = p$microbreak_reset_fixed)
+      updateSliderInput(session, "microbreak_decay_min",  value = p$microbreak_decay_min)
+      showNotification("✓ Time-on-Task policy imported successfully!", type = "message", duration = 3)
+      
+    } else if (pol$kind == "adaptive_gain") {
+      p <- pol$params
+      updateSliderInput(session, "gain_k",     value = p$k)
+      updateSliderInput(session, "gain_scale", value = p$scale)
+      showNotification("✓ Adaptive Gain policy imported successfully!", type = "message", duration = 3)
+      
+    } else {
+      showNotification(paste("Unknown policy kind:", pol$kind), type = "warning")
+    }
+  })
 }
 
 # ============================================================================
