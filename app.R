@@ -184,6 +184,139 @@ ui <- fluidPage(
           plotOutput("plot_fatigue", height = 500)
         )
       )
+    ),
+    
+    # ========================================================================
+    # TAB 4: Help & References
+    # ========================================================================
+    tabPanel(
+      "Help & References",
+      value = "tab_help",
+      br(),
+      fluidRow(
+        column(10, offset = 1,
+          div(style = "max-width: 900px; margin: 0 auto;",
+            
+            # What the knobs do
+            h3("🎯 What the Knobs Do", style = "color: #0b1526; margin-top: 20px;"),
+            tags$ul(style = "font-size: 1.05em; line-height: 1.8;",
+              tags$li(
+                HTML("<b>Adaptive Gain (Inverted-U):</b> Targets mid-arousal zone; extremes impair performance. This is an intuition plot only, demonstrating the Yerkes-Dodson relationship.")
+              ),
+              tags$li(
+                HTML("<b>Dual-Criterion (SDT):</b> One knob moves both decision boundaries (High-Load & Lapse) together; tunes <i>decision bias</i> (criteria), not d′. "),
+                tags$span(
+                  class = "help-icon",
+                  style = "display: inline-block;",
+                  `data-bs-toggle` = "tooltip",
+                  `data-bs-placement` = "top",
+                  title = "Enter/exit thresholds add persistence to prevent edge chatter.",
+                  "?"
+                ),
+                HTML(" Hysteresis (enter/exit thresholds) prevents rapid state transitions.")
+              ),
+              tags$li(
+                HTML("<b>Time-on-Task (Fatigue-Adaptive):</b> Hold steady until onset, then relax toward a floor with exponential half-life; a microbreak gives a brief reset that decays. Optional physiology-proportional reset is preferred.")
+              )
+            ),
+            
+            hr(),
+            
+            # Evidence axis & decision rule
+            h3("📊 Evidence Axis & Decision Rule", style = "color: #0b1526;"),
+            div(style = "padding: 15px; background: #f0f9ff; border-left: 4px solid #1f9bb6; margin-bottom: 20px;",
+              HTML("<p style='margin-bottom: 10px;'><b>X-axis:</b> A <b>z-scored, signed evidence index</b> (e.g., +w·z(TEPR) − v·z(RMSSD) ± …). Higher values → High-Load; lower values → Lapse.</p>"),
+              HTML("<p style='margin: 0;'><b>Not a DDM:</b> This is Signal Detection Theory with hysteresis (persistence), <i>not</i> a Drift-Diffusion Model. We're modeling dual decision criteria for state classification, not evidence accumulation dynamics. Chosen for real-time stability and interpretability.</p>")
+            ),
+            
+            hr(),
+            
+            # Maps to Dashboard
+            h3("🏥 Maps to Dashboard", style = "color: #0b1526;"),
+            p("These threshold policies are implemented in the production ",
+              tags$a("Surgical Cognitive Dashboard", 
+                     href = "https://github.com/mohdasti/surgical-cognitive-dashboard",
+                     target = "_blank",
+                     style = "color: #1f9bb6; font-weight: 600;"),
+              " for real-time monitoring:"),
+            tags$ul(style = "font-size: 1.05em; line-height: 1.8;",
+              tags$li(
+                HTML("<b>Adaptive Gain</b> sets the optimal arousal band width → affects coaching frequency and intervention timing.")
+              ),
+              tags$li(
+                HTML("<b>Dual-Criterion (SDT)</b> sets High-Load and Lapse thresholds together; alerts require both evidence threshold crossings AND physiological confirmation (e.g., TEPR↑ or HRV↓ for High-Load).")
+              ),
+              tags$li(
+                HTML("<b>Time-on-Task</b> drives automatic threshold relaxation based on elapsed time and implements the microbreak reset logic; optional physiology-proportional reset (preferred) uses pre/post measurements to scale recovery.")
+              )
+            ),
+            
+            hr(),
+            
+            # References
+            h3("📚 Key References", style = "color: #0b1526;"),
+            
+            h5("Adaptive Gain & Arousal:", style = "margin-top: 15px; color: #1f9bb6;"),
+            tags$ul(style = "line-height: 1.6;",
+              tags$li(
+                HTML("<b>Yerkes, R.M., & Dodson, J.D.</b> (1908). The relation of strength of stimulus to rapidity of habit-formation. <i>Journal of Comparative Neurology and Psychology</i>, 18(5), 459-482.")
+              ),
+              tags$li(
+                HTML("<b>Aston-Jones, G., & Cohen, J.D.</b> (2005). An integrative theory of locus coeruleus-norepinephrine function: Adaptive gain and optimal performance. <i>Annual Review of Neuroscience</i>, 28, 403-450. "),
+                tags$a("DOI: 10.1146/annurev.neuro.28.061604.135709", 
+                       href = "https://doi.org/10.1146/annurev.neuro.28.061604.135709",
+                       target = "_blank", style = "color: #1f9bb6;")
+              )
+            ),
+            
+            h5("Signal Detection Theory:", style = "margin-top: 15px; color: #1f9bb6;"),
+            tags$ul(style = "line-height: 1.6;",
+              tags$li(
+                HTML("<b>Macmillan, N.A., & Creelman, C.D.</b> (2004). <i>Detection Theory: A User's Guide</i> (2nd ed.). Psychology Press.")
+              ),
+              tags$li(
+                HTML("<b>Green, D.M., & Swets, J.A.</b> (1966). <i>Signal Detection Theory and Psychophysics</i>. Wiley.")
+              )
+            ),
+            
+            h5("Vigilance & Workload:", style = "margin-top: 15px; color: #1f9bb6;"),
+            tags$ul(style = "line-height: 1.6;",
+              tags$li(
+                HTML("<b>Warm, J.S., Parasuraman, R., & Matthews, G.</b> (2008). Vigilance requires hard mental work and is stressful. <i>Human Factors</i>, 50(3), 433-441. "),
+                tags$a("DOI: 10.1518/001872008X312152",
+                       href = "https://doi.org/10.1518/001872008X312152",
+                       target = "_blank", style = "color: #1f9bb6;")
+              ),
+              tags$li(
+                HTML("<b>Hart, S.G., & Staveland, L.E.</b> (1988). Development of NASA-TLX (Task Load Index): Results of empirical and theoretical research. <i>Advances in Psychology</i>, 52, 139-183.")
+              ),
+              tags$li(
+                HTML("<b>Tiwari, V., et al.</b> (2021). Microbreaks and their effect on surgeon mental workload and technical performance. <i>Surgery</i>, 170(5), 1346-1351. "),
+                tags$a("DOI: 10.1016/j.surg.2021.05.032",
+                       href = "https://doi.org/10.1016/j.surg.2021.05.032",
+                       target = "_blank", style = "color: #1f9bb6;")
+              )
+            ),
+            
+            div(style = "margin-top: 30px; padding: 15px; background: #f7f9fc; border-radius: 8px; text-align: center;",
+              HTML("<p style='margin: 0; font-size: 0.95em; color: #6b7280;'>"),
+              HTML("📖 Find papers quickly: "),
+              tags$a("Google Scholar", 
+                     href = "https://scholar.google.com/scholar?q=Adaptive+gain+Aston-Jones+Cohen+2005",
+                     target = "_blank", 
+                     rel = "noopener",
+                     style = "color: #1f9bb6; margin-right: 15px;"),
+              HTML(" · "),
+              tags$a("DOI Resolver",
+                     href = "https://doi.org/",
+                     target = "_blank",
+                     rel = "noopener",
+                     style = "color: #1f9bb6; margin-left: 15px;"),
+              HTML("</p>")
+            )
+          )
+        )
+      )
     )
   ),
   
