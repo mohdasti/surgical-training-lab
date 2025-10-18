@@ -246,6 +246,116 @@ Download via the **Export Policy** section at the bottom of the app.
 
 ---
 
+### **📸 Screenshots & UI Overview**
+
+#### **Tab 1: Adaptive Gain (Inverted-U)**
+
+![Adaptive Gain Screenshot](screenshots/adaptive_gain.png)
+
+*Inverted-U performance curve demonstrating the Yerkes-Dodson Law. Adjust `k` to control curve sharpness.*
+
+#### **Tab 2: Dual-Criterion (SDT)**
+
+![SDT Density Screenshot](screenshots/sdt_density.png)
+
+*Dual-criterion setup with hysteresis bands. Blue zone = Normal decision region; gray slivers = hysteresis zones.*
+
+![SDT Timeseries Screenshot](screenshots/sdt_timeseries.png)
+
+*Hysteresis reduces edge-chatter: circles (naive) vs triangles (hysteresis) show fewer state transitions.*
+
+#### **Tab 3: Time-on-Task (Fatigue)**
+
+![Time-on-Task Screenshot](screenshots/time_on_task.png)
+
+*Fatigue-adaptive threshold with onset, half-life, and microbreak annotations. Reset applies ONLY after break.*
+
+#### **Tab 4: Help & References**
+
+![Help Tab Screenshot](screenshots/help_references.png)
+
+*Educational content with key references, DOI links, and dashboard mapping.*
+
+> **Note:** Screenshots are placeholders. Generate actual screenshots after deployment using browser dev tools or screenshot utilities.
+
+---
+
+### **🔄 Export/Import Workflow**
+
+The app supports a complete configuration save/restore cycle:
+
+**Export Policy:**
+1. Adjust sliders to desired values
+2. Select policy type (adaptive_gain, dual_criterion, or time_on_task)
+3. Click "Export policy JSON"
+4. Save the downloaded JSON file
+
+**Import Policy:**
+1. Click "Import policy JSON" 
+2. Select a previously exported JSON file
+3. Sliders automatically update to match the imported configuration
+4. Notification confirms: "✓ [Policy Type] imported successfully!"
+
+**Use Cases:**
+- 💾 Save configurations for later use
+- 📊 Compare different parameter sets
+- 🤝 Share policies with colleagues
+- 📚 Maintain a library of validated configurations
+- 🔬 A/B testing of threshold strategies
+
+---
+
+### **🧬 Physiology-Proportional Reset (Time-on-Task)**
+
+The Time-on-Task policy supports **optional physiology-proportional reset** for microbreaks:
+
+**Download Template:**
+1. Click "Download physiology template" in Time-on-Task tab
+2. Get CSV with 6 columns: `RMSSD_pre`, `RMSSD_post`, `TEPR_pre`, `TEPR_post`, `Tremor_pre`, `Tremor_post`
+3. Replace example values with real pre/post microbreak measurements
+4. Upload via file input
+
+**How It Works:**
+- Computes weighted recovery index: **φ = 0.5×z(ΔRMSSD) + 0.3×z(−ΔTEPR) + 0.2×z(−ΔTremor)**
+- Scales reset: **reset = α × φ × gap** (where α=0.35, gap=c_start−baseline)
+- Larger physiological recovery → Larger threshold reset
+- More precise than fixed reset
+
+**Example Template Values:**
+```csv
+RMSSD_pre,RMSSD_post,TEPR_pre,TEPR_post,Tremor_pre,Tremor_post
+40,48,0.30,0.20,85,70
+```
+*Shows positive recovery: RMSSD↑, TEPR↓, Tremor↓*
+
+---
+
+### **⚠️ Important Notes**
+
+#### **Illustrative Demo Data**
+
+> **🔬 All evidence data shown in the plots is illustrative demo data, not clinical traces.**
+> 
+> - **Adaptive Gain:** Theoretical curve demonstrating Yerkes-Dodson relationship
+> - **SDT Distributions:** Simulated evidence from `rnorm()` with fixed means (−2, 0, +2)
+> - **SDT Timeseries:** AR(1) process with φ=0.92, not real surgical data
+> - **Time-on-Task:** Demonstrates mathematical policy, not actual threshold trace
+> 
+> **For real-time surgical monitoring with live data,** use the [Surgical Cognitive Dashboard](https://github.com/mohdasti/surgical-cognitive-dashboard).
+
+#### **Not a Drift-Diffusion Model**
+
+> **📊 This is Signal Detection Theory (SDT) with hysteresis, not a Drift-Diffusion Model (DDM).**
+>
+> - **SDT:** Dual decision criteria (high-load and lapse) for state classification
+> - **Hysteresis:** Enter/exit thresholds add persistence to prevent edge chatter
+> - **Not DDM:** We're modeling decision boundaries, not evidence accumulation dynamics
+> - **Why SDT?** Real-time stability, interpretability, and computational efficiency
+>
+> The evidence axis shows a **z-scored, signed index** (e.g., +w·z(TEPR) − v·z(RMSSD)), not accumulated drift.
+
+---
+
 ## 🚀 Getting Started
 
 ### **Quick Start:**
