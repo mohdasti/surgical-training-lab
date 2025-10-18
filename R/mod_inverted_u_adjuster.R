@@ -125,7 +125,7 @@ mod_inverted_u_adjuster_server <- function(id, cfg = list()) {
     })
     
     # Render inverted-U curve with zones using base R graphics
-    output$curve_plot <- renderPlot({
+    output$curve_plot <- renderPlot(bg = "white", {
       tryCatch({
         cat("DEBUG: Rendering Inverted-U curve plot\n")
         cat("DEBUG: Module namespace:", session$ns(""), "\n")

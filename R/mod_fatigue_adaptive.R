@@ -147,7 +147,7 @@ mod_fatigue_adaptive_server <- function(id, cfg = list()) {
     })
     
     # Plot timeline
-    output$timeline_plot <- renderPlot({
+    output$timeline_plot <- renderPlot(bg = "white", {
       # Functions already loaded, no need to source
       
       # Generate timeline
@@ -173,12 +173,19 @@ mod_fatigue_adaptive_server <- function(id, cfg = list()) {
       current_t <- current_time()
       current_thresh <- thresholds_reactive()
       
+      par(bg = "white")
       par(mar = c(5, 5, 4, 2), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.3)
+      # Initialize plot without drawing to allow manual background fill
       plot(timeline_df$time, timeline_df$high,
-           type = "l", col = "#f39c12", lwd = 3,
+           type = "n",
            xlab = "Time (minutes)", ylab = "Threshold",
            ylim = c(0.3, 1.0), las = 1,
            main = "Threshold Decay Over Time")
+      # Explicitly paint the panel background white
+      usr <- par("usr")
+      rect(usr[1], usr[3], usr[2], usr[4], col = "white", border = NA)
+      # Now draw the data
+      lines(timeline_df$time, timeline_df$high, col = "#f39c12", lwd = 3)
       lines(timeline_df$time, timeline_df$lapse, col = "#e74c3c", lwd = 3)
       
       # ALWAYS mark current time with a vertical dashed line

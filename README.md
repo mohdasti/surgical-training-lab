@@ -111,6 +111,141 @@ Long surgical procedures where fatigue is a known factor
 
 ---
 
+## 🎯 Case-Study Alignment
+
+This application implements **three threshold policy controllers** with parameter names and semantics that exactly match the accompanying case study documentation. Each policy is a pure R function in `R/policies.R` with precise mathematical specifications.
+
+### **Policy 1: Adaptive Gain (Inverted-U)**
+
+**Function:** `adaptive_gain_perf(x, k, scale)`
+
+**Purpose:** Demonstrates the inverted-U relationship between arousal and performance.
+
+**Parameters:**
+- **`k`** (numeric): Curve sharpness, controls how quickly performance falls off from the peak  
+  - Range: 0.1 to 1.0  
+  - Default: 0.4  
+  - Higher k = sharper peak, narrower optimal zone
+- **`scale`** (numeric): Global performance scale factor  
+  - Range: 0.5 to 2.0  
+  - Default: 1.0
+
+**Theory:** Yerkes-Dodson Law / Adaptive Gain Theory  
+**Use Case:** Intuition plot showing optimal mid-arousal performance zone
+
+---
+
+### **Policy 2: Dual-Criterion (Signal Detection Theory)**
+
+**Function:** `sdt_dual_criterion(criterion_tightness, coupling, hys_margin, base_hl, base_lapse, move_range)`
+
+**Purpose:** Two decision criteria (high-load and lapse) with hysteresis to prevent edge chatter.
+
+**Parameters:**
+- **`criterion_tightness`** (0–1): How tightly criteria are set  
+  - Default: 0.60  
+  - 0 = loose (wide normal zone), 1 = tight (narrow normal zone)
+- **`coupling`** (0–1): How much the lapse criterion follows the high-load criterion  
+  - Default: 0.70  
+  - 1 = symmetric movement, 0 = only high-load moves
+- **`hys_margin`** (numeric): Hysteresis margin (enter–exit gap)  
+  - Range: 0.00 to 0.50  
+  - Default: 0.15  
+  - Creates "sticky" zones to reduce rapid state transitions
+- **`base_hl`** (numeric): Baseline high-load criterion in evidence units  
+  - Default: 1.60
+- **`base_lapse`** (numeric): Baseline lapse criterion in evidence units  
+  - Default: -1.60
+- **`move_range`** (numeric): Maximum criterion movement range  
+  - Default: 1.00
+
+**Returns:** List with 6 thresholds: `crit_hl`, `crit_lapse`, `hi_enter`, `hi_exit`, `lo_enter`, `lo_exit`
+
+**Theory:** Signal Detection Theory with dual criteria and hysteresis  
+**Use Case:** Tuning bias (not sensitivity d′); prevents edge chatter
+
+---
+
+### **Policy 3: Time-on-Task (Fatigue-Adaptive)**
+
+**Function:** `time_on_task_threshold(t, c_start, c_floor, onset_min, fatigue_half_life_min, microbreak_min, microbreak_reset_fixed, microbreak_decay_min, phys_opt)`
+
+**Purpose:** Decision threshold that relaxes with fatigue and briefly tightens after microbreak.
+
+**Parameters:**
+- **`t`** (numeric vector): Time in minutes
+- **`c_start`** (0–1): Initial decision threshold  
+  - Default: 0.70  
+  - Held constant until onset
+- **`c_floor`** (0–1): Asymptotic floor threshold  
+  - Default: 0.50  
+  - Target for exponential decay
+- **`onset_min`** (numeric): Fatigue onset time in minutes  
+  - Default: 30  
+  - Threshold relaxes after this point
+- **`fatigue_half_life_min`** (numeric): Time to decay halfway from c_start to c_floor  
+  - Default: 21  
+  - Controls decay rate
+- **`microbreak_min`** (numeric): Microbreak time in minutes  
+  - Default: 60  
+  - NA or 0 for no break
+- **`microbreak_reset_fixed`** (0–1): Fixed reset magnitude after break  
+  - Default: 0.08  
+  - Can be replaced by physiology-proportional reset
+- **`microbreak_decay_min`** (numeric): Time constant for reset decay  
+  - Default: 2  
+  - How quickly the reset benefit fades
+- **`phys_opt`** (list, optional): Pre/post physiology for proportional reset  
+  - Columns: `RMSSD_pre`, `RMSSD_post`, `TEPR_pre`, `TEPR_post`, `Tremor_pre`, `Tremor_post`  
+  - Formula: `reset = alpha * phi * gap` where phi is weighted recovery index
+
+**Returns:** Numeric vector of threshold values over time
+
+**Theory:** Vigilance Decrement / Time-on-Task Effects  
+**Use Case:** Hold steady until onset; relax with half-life; microbreak briefly tightens threshold  
+**Key Behavior:** Reset applies **ONLY AFTER** microbreak (not before)
+
+---
+
+### **Parameter Name Consistency**
+
+All parameter names in the UI, functions, and JSON exports match the case study exactly:
+
+✓ **No abbreviations** where clarity is needed  
+✓ **Underscores** for multi-word parameters (e.g., `criterion_tightness`, not `criterionTightness`)  
+✓ **Units in names** where ambiguous (e.g., `onset_min`, `microbreak_min`)  
+✓ **Semantic clarity** over brevity (e.g., `hys_margin` instead of `h` or `margin`)
+
+### **JSON Export Format**
+
+Each policy can be exported as JSON with this structure:
+
+```json
+{
+  "kind": "dual_criterion",
+  "params": {
+    "criterion_tightness": 0.60,
+    "coupling": 0.70,
+    "hys_margin": 0.15,
+    "base_hl": 1.60,
+    "base_lapse": -1.60,
+    "move_range": 1.00
+  },
+  "thresholds": {
+    "crit_hl": 1.00,
+    "crit_lapse": -1.18,
+    "hi_enter": 1.00,
+    "hi_exit": 0.85,
+    "lo_enter": -1.18,
+    "lo_exit": -1.03
+  }
+}
+```
+
+Download via the **Export Policy** section at the bottom of the app.
+
+---
+
 ## 🚀 Getting Started
 
 ### **Quick Start:**
@@ -120,13 +255,25 @@ Long surgical procedures where fatigue is a known factor
 git clone https://github.com/mohdasti/surgical-training-lab.git
 cd surgical-training-lab
 
-# 2. Install dependencies (in R)
-install.packages(c("shiny", "bslib", "plotly", "DT", "shinyjs",
-                   "tidyverse", "zoo"))
+# 2. Check dependencies
+Rscript check_dependencies.R
 
-# 3. Run the app
-Rscript -e "shiny::runApp('app.R', port=3839, launch.browser=TRUE)"
+# 3. Launch the app
+Rscript launch_app.R
 ```
+
+**Alternative: From R Console**
+
+```r
+# Install dependencies if needed
+install.packages(c("shiny", "bslib", "ggplot2", "plotly", "DT", 
+                   "shinyjs", "htmltools", "jsonlite"))
+
+# Run the app
+shiny::runApp()
+```
+
+See [DEPENDENCIES.md](DEPENDENCIES.md) for detailed dependency information.
 
 ### **Usage:**
 
@@ -200,18 +347,30 @@ Rscript -e "shiny::runApp('app.R', port=3839, launch.browser=TRUE)"
 
 ```
 surgical-training-lab/
-├── app.R                          # Main Shiny application (simplified interface)
-├── R/                             # Modules and utilities
-│   ├── mod_inverted_u_adjuster.R         # Inverted-U paradigm
-│   ├── mod_unified_sensitivity.R         # Unified sensitivity paradigm
-│   ├── mod_fatigue_adaptive.R            # Fatigue-adaptive paradigm
-│   ├── threshold_utils.R                 # Threshold calculation utilities
-│   ├── ui_constants.R                    # UI constants
-│   └── ui_theme.R                        # Theme
+├── app.R                          # Main Shiny application (case-study aligned UI)
+├── launch_app.R                   # Quick launch script
+├── check_dependencies.R           # Dependency checker and installer
+├── DESCRIPTION                    # Package metadata and dependencies
+├── DEPENDENCIES.md                # Detailed dependency documentation
+├── QA_CHECKLIST.md                # Quality assurance checklist
+├── R/                             # Policy functions and modules
+│   ├── policies.R                 # Core policy functions (case-study aligned)
+│   ├── theme.R                    # Clinical bslib theme with Bootstrap 5
+│   ├── mod_inverted_u_adjuster.R  # Inverted-U module (legacy)
+│   ├── mod_unified_sensitivity.R  # Unified sensitivity module (legacy)
+│   ├── mod_fatigue_adaptive.R     # Fatigue-adaptive module (legacy)
+│   ├── threshold_utils.R          # Threshold utilities
+│   └── [...other modules...]      # Additional utility modules
 ├── config/
 │   └── config.yml                 # Configuration parameters
 └── README.md                      # This file
 ```
+
+**Key Files:**
+- **`R/policies.R`**: Pure R functions implementing the three threshold policies
+- **`R/theme.R`**: Clinical color palette and Bootstrap 5 theme
+- **`app.R`**: Three-tab UI with exact case-study parameter names
+- **`QA_CHECKLIST.md`**: Comprehensive testing checklist for visual parity
 
 ---
 

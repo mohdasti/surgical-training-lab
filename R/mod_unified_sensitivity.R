@@ -121,7 +121,7 @@ mod_unified_sensitivity_server <- function(id, cfg = list()) {
     })
     
     # Visualize threshold progression
-    output$threshold_viz <- renderPlot({
+    output$threshold_viz <- renderPlot(bg = "white", {
       # Generate threshold curves across sensitivity range
       s_seq <- seq(0, 1, length.out = 100)
       # Functions already loaded, no need to source
