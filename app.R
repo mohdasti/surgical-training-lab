@@ -28,11 +28,13 @@ ui <- fluidPage(
   
   # Initialize Bootstrap 5 tooltips
   tags$script(HTML("
-    $(document).ready(function(){
-      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));
-      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-      });
+    document.addEventListener('DOMContentLoaded', function() {
+      const els = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));
+      els.forEach(el => new bootstrap.Tooltip(el, {
+        container: 'body',
+        trigger: 'hover focus',
+        html: true
+      }));
     });
   ")),
   
