@@ -174,6 +174,13 @@ ui <- fluidPage(
             fileInput("phys_csv", 
                       "Optional: Upload microbreak pre/post physiology CSV", 
                       accept = c(".csv")),
+            downloadButton("dl_phys_template", "Download physiology template", 
+                          class = "btn-sm btn-outline-secondary",
+                          style = "margin-bottom: 10px;"),
+            helpText(
+              style = "font-size: 0.9em; margin-top: 5px;",
+              HTML("<b>Proportional reset:</b> If provided, reset size scales with short-window recovery: ↑RMSSD, ↓TEPR, ↓Tremor → larger reset. Formula: <code>reset = α × φ × gap</code> where φ is weighted recovery index.")
+            ),
             hr(),
             helpText("🔬 Vigilance Decrement: Policy on the decision threshold with exponential decay. ",
                      "Optional physiology-proportional reset (preferred) after microbreak.")
@@ -544,6 +551,24 @@ server <- function(input, output, session) {
       theme_minimal(base_size = 14) + 
       theme(legend.position = "none")
   })
+  
+  # ========================================================================
+  # Download Physiology CSV Template
+  # ========================================================================
+  output$dl_phys_template <- downloadHandler(
+    filename = function() "microbreak_physio_template.csv",
+    content = function(file) {
+      ex <- data.frame(
+        RMSSD_pre = 40,
+        RMSSD_post = 48,
+        TEPR_pre = 0.30,
+        TEPR_post = 0.20,
+        Tremor_pre = 85,
+        Tremor_post = 70
+      )
+      utils::write.csv(ex, file, row.names = FALSE)
+    }
+  )
   
   # ========================================================================
   # Export Policy JSON (Downloadable)
